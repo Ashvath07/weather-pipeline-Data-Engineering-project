@@ -1,0 +1,23 @@
+# Environment
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Airflow
+logs/
+airflow.cfg
+
+# VS Code
+.vscode/
+
+# Data
+data/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ML Models
+*.pkl
