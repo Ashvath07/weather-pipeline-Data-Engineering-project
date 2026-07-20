@@ -1,70 +1,100 @@
 # 🌦️ Weather Data Engineering Pipeline
 
-An end-to-end Data Engineering project that extracts live weather data from OpenWeatherMap API, stores it in AWS S3, processes it using Databricks (Bronze → Silver → Gold architecture), and orchestrates the complete workflow using Apache Airflow running inside Docker.
+## 📌 Project Overview
 
----
+This project is an end-to-end cloud-based Data Engineering Pipeline that automates weather data ingestion, transformation, storage, orchestration, and analytics.
 
-## 🚀 Project Overview
-
-This project demonstrates a modern cloud-based Data Engineering pipeline.
-
-The pipeline performs the following steps:
-
-1. Extract weather data from OpenWeatherMap API
-2. Store raw JSON data in AWS S3 (Bronze Layer)
-3. Trigger Databricks Workflow
-4. Clean and transform the data (Silver Layer)
-5. Aggregate the data (Gold Layer)
-6. Schedule everything automatically using Apache Airflow
-7. Deploy the pipeline using Docker on AWS EC2
+The pipeline extracts live weather data from the OpenWeatherMap API for multiple Indian cities, stores raw data in Amazon S3 (Bronze Layer), transforms it using Apache Spark in Databricks into Silver and Gold layers, stores curated data in Snowflake Data Warehouse, and orchestrates the entire workflow using Apache Airflow running inside Docker on AWS EC2.
 
 ---
 
 # 🏗️ Architecture
 
 ```
-                    OpenWeather API
+                  OpenWeatherMap API
                            │
                            ▼
-                  Python Extraction Script
+                Python Extraction Script
                            │
                            ▼
-                  AWS S3 (Bronze Layer)
+                 Local Bronze JSON Files
                            │
                            ▼
-                 Apache Airflow Scheduler
+                   AWS S3 Bronze Layer
                            │
                            ▼
-               Databricks Workflow Trigger
+              Databricks (Apache Spark)
                            │
         ┌──────────────────┴─────────────────┐
         ▼                                    ▼
-   Silver Layer                        Gold Layer
-(Data Cleaning)                  (Aggregated Data)
-        │                                    │
-        └──────────────────┬─────────────────┘
-                           ▼
-                     AWS S3 Storage
-                           │
-                           ▼
-                     Future Dashboard
-                 (Power BI / Tableau)
+ S3 Silver Layer (Parquet)          Delta Silver Table
+        │
+        ▼
+Gold Aggregation using Spark
+        │
+        ├──────────────► S3 Gold Layer
+        │
+        ▼
+ Snowflake Data Warehouse
+        │
+        ▼
+ Power BI / Tableau / Machine Learning
 ```
+
+---
+
+# 🚀 Features
+
+- Live Weather Data Extraction
+- Automatic Data Ingestion
+- Bronze, Silver and Gold Lakehouse Architecture
+- Data Cleaning using Apache Spark
+- Delta Lake Tables
+- Amazon S3 Storage
+- Snowflake Data Warehouse
+- Apache Airflow Workflow Automation
+- Docker Containerization
+- AWS EC2 Deployment
+- Ready for Business Intelligence
+- Ready for Machine Learning
 
 ---
 
 # 🛠️ Tech Stack
 
+### Programming
+
 - Python
-- Apache Airflow
-- Docker
+
+### Cloud
+
 - AWS EC2
 - AWS S3
+
+### Data Engineering
+
+- Apache Spark
 - Databricks
-- PySpark
 - Delta Lake
-- OpenWeatherMap API
-- Git & GitHub
+- Apache Airflow
+
+### Containerization
+
+- Docker
+
+### Data Warehouse
+
+- Snowflake
+
+### BI
+
+- Power BI
+- Tableau
+
+### Version Control
+
+- Git
+- GitHub
 
 ---
 
@@ -72,222 +102,245 @@ The pipeline performs the following steps:
 
 ```
 weather-data/
-
-│
-├── config/
 │
 ├── dags/
-│   ├── extract/
-│   │      Extract_elt.py
-│   │      connect_aws.py
-│   │      trigger_databricks.py
-│   │
-│   ├── Databricks/
-│   │      silver_layer.ipynb
-│   │      gold_layer.ipynb
-│   │
-│   └── weather_pipeline.py
+│     ├── extract/
+│     ├── upload_to_s3/
+│     ├── airflow_dag.py
 │
 ├── data/
+│     ├── bronze/
+│     ├── silver/
+│     └── gold/
 │
-├── logs/
+├── notebooks/
+│     ├── Bronze_to_Silver.py
+│     ├── Silver_to_Gold.py
 │
 ├── docker-compose.yml
-│
 ├── requirements.txt
-│
-├── .env.example
-│
-└── README.md
+├── README.md
+└── .env
 ```
 
 ---
 
-# ⚙️ Data Pipeline Flow
+# ⚙️ Workflow
 
-### Step 1
+## Step 1
 
-Extract live weather data from OpenWeatherMap API.
+Extract weather data from OpenWeatherMap API.
 
 ↓
 
-### Step 2
+## Step 2
 
-Store raw JSON files into
-
-AWS S3
-
-```
-bronze/
-```
+Store raw JSON files locally.
 
 ↓
 
-### Step 3
+## Step 3
 
-Apache Airflow schedules the DAG daily.
-
-↓
-
-### Step 4
-
-Airflow uploads data to AWS S3.
+Upload JSON files to Amazon S3 Bronze Layer.
 
 ↓
 
-### Step 5
+## Step 4
 
-Airflow triggers Databricks Workflow.
-
-↓
-
-### Step 6
-
-Databricks Notebook creates
-
-Silver Layer
-
-- Remove null values
-- Standardize columns
-- Data Cleaning
+Read Bronze JSON using Apache Spark.
 
 ↓
 
-### Step 7
+## Step 5
 
-Gold Layer
-
-- City-wise weather summary
-- Average temperature
-- Average humidity
-- Average pressure
-- Wind statistics
+Clean and transform the data.
 
 ↓
 
-### Step 8
+## Step 6
 
-Processed data stored back into AWS S3.
+Store transformed data in
 
----
+- Silver Delta Table
+- Silver Parquet (S3)
 
-# 📸 Screenshots
+↓
 
-## Airflow DAG
+## Step 7
 
-(Add Screenshot)
+Aggregate business metrics
 
----
+- Average Temperature
+- Average Humidity
+- Maximum Temperature
+- Minimum Temperature
+- Wind Speed
+- Weather Count
 
-## AWS S3 Bucket
+↓
 
-(Add Screenshot)
+## Step 8
 
----
+Store Gold Layer
 
-## Databricks Workflow
-
-(Add Screenshot)
-
----
-
-## Gold Layer Output
-
-(Add Screenshot)
-
----
-
-# 🔐 Environment Variables
-
-Create a `.env` file.
-
-```
-API_KEY=
-
-AWS_ACCESS_KEY_ID=
-
-AWS_SECRET_ACCESS_KEY=
-
-AWS_REGION=
-
-S3_BUCKET=
-
-DATABRICKS_HOST=
-
-DATABRICKS_TOKEN=
-
-JOB_ID=
-```
-
----
-
-# ▶️ Run the Project
-
-Clone repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/weather-pipeline-Data-Engineering-project.git
-```
-
-Go inside project
-
-```bash
-cd weather-pipeline-Data-Engineering-project
-```
-
-Create .env
-
-```
-Paste your credentials
-```
-
-Run Docker
-
-```bash
-docker compose up -d
-```
-
-Open Airflow
-
-```
-http://localhost:8080
-```
-
-Run
-
-```
-weather_pipeline
-```
-
----
-
-# ☁️ AWS Services Used
-
-- Amazon EC2
-- Amazon S3
-- IAM
-
----
-
-# 📊 Databricks
-
-- Workflow Trigger
-- PySpark
-- Delta Lake
-- Silver Layer
-- Gold Layer
-
----
-
-# 📈 Future Improvements
-
-- ML Weather Prediction
-- Real-time Streaming
-- Kafka Integration
+- S3 Gold Parquet
 - Snowflake Data Warehouse
-- Power BI Dashboard
-- Email Notifications
+
+↓
+
+## Step 9
+
+Visualize using Power BI/Tableau
+
+or
+
+Train Machine Learning Models
+
+---
+
+# 🥉 Bronze Layer
+
+Stores raw JSON files without modification.
+
+Example:
+
+```
+weather_20260720_101501.json
+```
+
+---
+
+# 🥈 Silver Layer
+
+Cleaned data containing
+
+- City
+- Country
+- Latitude
+- Longitude
+- Temperature
+- Humidity
+- Pressure
+- Wind Speed
+- Weather
+- Description
+- Ingestion Date
+- Year
+- Month
+- Day
+
+Stored as
+
+- Delta Table
+- Parquet Files
+
+---
+
+# 🥇 Gold Layer
+
+Business-ready aggregated dataset.
+
+Contains
+
+- Average Temperature
+- Average Humidity
+- Average Pressure
+- Average Wind Speed
+- Maximum Temperature
+- Minimum Temperature
+- Total Records
+
+Stored in
+
+- Amazon S3
+- Snowflake Data Warehouse
+
+---
+
+# ☁ AWS Services Used
+
+- EC2
+- S3
+- IAM
+- Security Groups
+
+---
+
+# ❄ Snowflake
+
+Warehouse
+
+```
+WEATHER_WH
+```
+
+Database
+
+```
+WEATHER_DB
+```
+
+Schema
+
+```
+WEATHER_SCHEMA
+```
+
+Table
+
+```
+WEATHER_DATA
+```
+
+---
+
+# 🔄 Airflow Pipeline
+
+```
+Extract Data
+      │
+      ▼
+Upload to S3
+      │
+      ▼
+Bronze → Silver
+      │
+      ▼
+Silver → Gold
+      │
+      ▼
+Load to Snowflake
+```
+
+---
+
+# 📊 Future Scope
+
+- Real-time Streaming using Kafka
+- AWS Glue
+- AWS Athena
+- Machine Learning Prediction
+- Weather Forecast Dashboard
 - CI/CD using GitHub Actions
+- Kubernetes Deployment
+
+---
+
+# 📈 Skills Demonstrated
+
+- Data Engineering
+- ETL Pipeline
+- ELT Pipeline
+- Apache Spark
+- Data Lake
+- Delta Lake
+- Data Warehouse
+- Snowflake
+- Airflow
+- Docker
+- AWS
+- Python
+- Cloud Computing
 
 ---
 
@@ -295,12 +348,15 @@ weather_pipeline
 
 **Ashvath M**
 
-B.E Computer Science Engineering
+Final Year B.E Computer Science Engineering
 
-Data Engineering Enthusiast
-
-GitHub:
-https://github.com/Ashvath07
+Email: ashavth011@gmail.com
 
 LinkedIn:
-(Add Your LinkedIn)
+(https://www.linkedin.com/in/ashvath-m/)
+GitHub:
+https://github.com/Ashvath07/
+
+---
+
+# ⭐ If you found this project useful, don't forget to follow me .
