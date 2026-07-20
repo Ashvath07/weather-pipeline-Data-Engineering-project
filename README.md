@@ -310,12 +310,6 @@ Silver → Gold
       │
       ▼
 Load to Snowflake
-
-
-
-
-<img width="2510" height="979" alt="image" src="https://github.com/user-attachments/assets/eba65985-86e0-40c2-982d-14ad6b17fe9f" />
-
 ```
 
 ---
