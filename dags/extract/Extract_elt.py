@@ -14,14 +14,36 @@ class Extract_elt:
         self.API_KEY = os.getenv("API_KEY")
 
         self.CITIES = [
-            "Chennai", "Bengaluru", "Mumbai", "Delhi", "Hyderabad",
-            "Kolkata", "Pune", "Ahmedabad", "Jaipur", "Lucknow",
-            "Bhopal", "Patna", "Bhubaneswar", "Chandigarh", "Kochi",
-            "Thiruvananthapuram", "Coimbatore", "Madurai",
-            "Visakhapatnam", "Vijayawada", "Nagpur", "Indore",
-            "Surat", "Guwahati", "Ranchi", "Mysuru",
-            "Mangalore", "Dehradun", "Shimla", "Srinagar"
-        ]
+    # India
+    "Chennai", "Bengaluru", "Mumbai", "Delhi", "Hyderabad",
+    "Kolkata", "Jaipur", "Lucknow", "Ahmedabad", "Pune","Coimbatore","Tirupathur","Madurai","Vellore","Salem","Tiruchirappalli","Thanjavur","Erode","Nagercoil","Tirunelveli",
+
+    # USA
+    "New York", "Los Angeles", "Chicago", "Houston", "Washington",
+
+    # Canada
+    "Toronto", "Vancouver", "Ottawa", "Montreal",
+
+    # Europe
+    "London", "Paris", "Berlin", "Madrid", "Rome",
+    "Amsterdam", "Brussels", "Lisbon", "Munich", "Frankfurt",
+
+    # Asia
+    "Tokyo", "Osaka", "Seoul", "Beijing", "Shanghai",
+    "Singapore", "Bangkok", "Kuala Lumpur", "Jakarta", "Manila",
+
+    # Middle East
+    "Dubai", "Abu Dhabi", "Doha", "Riyadh", "Muscat",
+
+    # Africa
+    "Cairo", "Nairobi", "Johannesburg", "Cape Town",
+
+    # Australia
+    "Sydney", "Melbourne", "Canberra", "Auckland", "Wellington",
+
+    # South America
+    "São Paulo", "Rio de Janeiro", "Buenos Aires", "Mexico City"
+]
 
         self.BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
@@ -65,3 +87,4 @@ class Extract_elt:
         print(f"Created : {local_file}")
 
         return local_file
+    print ("Extracted Successfully")
